@@ -1,0 +1,74 @@
+import 'package:crud_exercise1/services/user_services.dart';
+import 'package:flutter/material.dart';
+
+final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
+
+class AddUser extends StatefulWidget {
+  @override
+  _AddUserState createState() => _AddUserState();
+}
+
+class _AddUserState extends State<AddUser> {
+  UserServices userServices;
+
+  TextEditingController uidCon = new TextEditingController();
+  TextEditingController nameCon = new TextEditingController();
+  TextEditingController mobileCon = new TextEditingController();
+  TextEditingController emailCon = new TextEditingController();
+  TextEditingController passwordCon = new TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    userServices = UserServices();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldState,
+      appBar: AppBar(
+        title: Text("Add Data"),
+        centerTitle: true,
+      ),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            TextField(
+                controller: uidCon,
+                decoration: InputDecoration(labelText: 'Masukkan UID')),
+            TextField(
+                controller: nameCon,
+                decoration: InputDecoration(labelText: 'Masukkan Name')),
+            TextField(
+                controller: mobileCon,
+                decoration: InputDecoration(labelText: 'Masukkan Mobile')),
+            TextField(
+                controller: emailCon,
+                decoration: InputDecoration(labelText: 'Masukkan Email')),
+            TextField(
+                controller: passwordCon,
+                decoration: InputDecoration(labelText: 'Masukkan Password')),
+            RaisedButton(
+                child: Text("Tambah"),
+                onPressed: () {
+                  userServices
+                      .addUser(uidCon.text, nameCon.text, mobileCon.text,
+                          emailCon.text, passwordCon.text)
+                      .then((result) {
+                    if (result != null) {
+                      Navigator.of(context).pop("datapop");
+                      
+                    } else {
+                      _scaffoldState.currentState.showSnackBar(SnackBar(
+                        content: Text("Simpan data gagal"),
+                      ));
+                    }
+                  });
+                })
+          ],
+        ),
+      ),
+    );
+  }
+}
